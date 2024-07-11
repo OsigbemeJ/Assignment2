@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fetch Image With Blob</title>
+</head>
+<body>
+  <h1>Fetch Image With Blob</h1>
+  <button id="fetch-image">Fetch Image</button>
+  <div id="image-container"></div>
+  <script>
+    document.getElementById("fetch-image").addEventListener("click", () => {
+      fetch("/fetch-single")
+        .then((response) => response.blob())
+        .then((imageBlob) => {
+          const imageObjectURL = URL.createObjectURL(imageBlob);
+          const img = document.createElement("img");
+          img.src = imageObjectURL;
+          img.width = 400;
+          const imageContainer = document.getElementById("image-container");
+          imageContainer.innerHTML = ""; // Clear previous image
+          imageContainer.appendChild(img);
+        })
+        .catch((error) => console.error("Error fetching image:", error));
+    });
+  </script>
+</body>
+</html>

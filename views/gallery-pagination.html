@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gallery Pagination</title>
+</head>
+<body>
+  <h1>Gallery Pagination</h1>
+  <div id="gallery"></div>
+  <button id="prev">Previous</button>
+  <button id="next">Next</button>
+  <script>
+    let currentPage = 1;
+    const itemsPerPage = 10;
+    document.getElementById("prev").addEventListener("click", () => {
+      if (currentPage > 1) {
+        currentPage--;
+        loadGallery();
+      }
+    });
+    document.getElementById("next").addEventListener("click", () => {
+      currentPage++;
+      loadGallery();
+    });
+
+    function loadGallery() {
+      fetch(`/fetch-all/pages/${currentPage}?items_per_page=${itemsPerPage}`)
+        .then(response => response.json())
+        .then(data => {
+          const gallery = document.getElementById("gallery");
+          gallery.innerHTML = "";
+          data.files.forEach(file => {
+            const img = document.createElement("img");
+            img.src = `data:image/jpeg;base64,${file[1]}`;
+            img.width = 100;
+            gallery.appendChild(img);
+          });
+        })
+        .catch(error => console.error("Error loading gallery:", error));
+    }
+    loadGallery();
+  </script>
+</body>
+</html>
